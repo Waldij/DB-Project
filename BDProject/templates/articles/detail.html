@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}{{article.article_title}}{% endblock %}
+
+{% block content %}
+
+<div class="jumbotron">
+    <div class="container">
+      <h1 class="display-3">{{article.article_title}}</h1>
+      <p>{{article.article_text}}</p>
+      <p>{{article.pub_date}}</p>
+      <p><a class="btn btn-primary btn-lg" href="/articles/" role="button"> Назад </a></p>
+    </div>
+  </div>
+
+<div class="container">
+    <hr>
+
+        {% if latest_comments_list %}
+            {% for c in latest_comments_list %}
+                <p>
+                    <strong>{{c.author_name}}</strong>
+                    <p>{{c.comment_text}}</p>
+                </p><hr>
+            {% endfor %}
+        {% else %}
+            <p> Комментариев пока нет. Прокомментируйте первым! </p>
+        {% endif %}
+
+    <form action="{% url 'articles:leave_comment' article.id %}" method="post">
+
+        {% csrf_token %}
+
+        <input type="text" class="form-control" required placeholder="Ваше имя" name="name"><br>
+        <textarea name="text" class="form-control" required placeholder="Текст комментария" cols="30" rows="10"></textarea><br>
+
+        <button type="submit" class="btn btn-primary">Оставить комментарий</button>
+
+    </form>
+</div>
+{% endblock %}
